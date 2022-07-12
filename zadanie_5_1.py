@@ -14,21 +14,17 @@ class BaseContact:
        self.last_name = last_name
        self.phone = phone
        self.e_mail = e_mail
-       self.label_length = 0
+   # Nie jest potrzebne
    def __repr__(self):  
        return f"BaseContact({self.first_name} {self.last_name} {self.phone} {self.e_mail})"  
+   # Nie jest potrzebne
    def __str__(self): 
        return f'{self.first_name} {self.last_name} {self.phone} {self.e_mail}' 
    def contact(self):
        return print(f' Wybieram {self.phone} i kontaktuję się z {self.first_name} {self.last_name}.')  
-   """@property
+   @property
    def label_length(self):
-       return self._label_length
-   @label_length.setter
-   def label_length(self,name):
-        self._label_length = len(name)"""
-
-
+       return len(self.first_name+self.last_name)
 
 class BusinessContact(BaseContact):
     def __init__(self, company, position, business_phone, *args, **kwargs):
@@ -36,15 +32,14 @@ class BusinessContact(BaseContact):
         self.company = company
         self.position = position
         self.business_phone = business_phone
+    # Nie jest potrzebne
     def __str__(self): 
-       return f'{self.company} {self.position} {self.business_phone}'   
+       return f'{self.company} {self.position} {self.business_phone}'  
+    # Nie jest potrzebne 
     def __repr__(self):  
-       return f"BusinessContact({self.first_name} {self.last_name} {self.phone} {self.e_mail})"  
-
-    
+       return f"BusinessContact({self.first_name} {self.last_name} {self.phone} {self.e_mail})"     
     def contact(self):
-       return print(f' Wybieram {self.business_phone} i kontaktuję się z {self.first_name} {self.last_name}.')  
-    # Czy da się to zrobić sprytniej?
+         return print(f' Wybieram {self.business_phone} i kontaktuję się z {self.first_name} {self.last_name}.')  
 
 def create_contacts(type,amount):
     from faker import Faker
@@ -61,18 +56,24 @@ def create_contacts(type,amount):
             company = fake.company(), position = fake.job(), business_phone=fake.phone_number())
             rbc_list.append(bc)
     return rbc_list
-
-# Testujemy kontakt podstawowy
-bc = BaseContact(first_name = "Bolesław", last_name="Michalski", e_mail = "BoleslawMichalski@jourrapide.com", phone="+48123456788")
-BaseContact.contact(bc)
-# Testujemy kontakt biznesowy
-bcc = BusinessContact(first_name = "Bolesław", last_name = "Michalski", e_mail = "BoleslawMichalski@jourrapide.com", phone="+48123456788", 
+if __name__ == "__main__":
+    # Testujemy kontakt podstawowy
+    bc = BaseContact(first_name = "Bolesław", last_name="Michalski", e_mail = "BoleslawMichalski@jourrapide.com", phone="+48123456788")
+    BaseContact.contact(bc)
+    # Testujemy kontakt biznesowy
+    bcc = BusinessContact(first_name = "Bolesław", last_name = "Michalski", e_mail = "BoleslawMichalski@jourrapide.com", phone="+48123456788", 
       company="Vibrant Man", position = "Boilermaker",business_phone="+48999999999")    
-BusinessContact.contact(bcc)
-# Testujemy create.contacts()
-print(create_contacts("bc",1)[0])
-print(create_contacts("bbc",1)[0])
-# Nie działa poprawnie. 
-# Do wyjaśnienia: jak to dopisac do __main__?
-# Do wyjaśnienia: dynamiczny atrybut label_length
+    BusinessContact.contact(bcc)
+    # Testujemy create.contacts()
+    created_contacts = create_contacts("bc",10)
+    for create_contact in created_contacts:
+        print(f"{create_contact}")
+        print(f"Łączna ilość znaków imienia i nazwiska wynosi (bez spacji): {create_contact.label_length}\n" )
+    created_b_contacts = create_contacts("bc",10)
+    for create_b_contact in created_b_contacts:
+        print(f"{create_b_contact}")
+        print(f"Łączna ilość znaków imienia i nazwiska wynosi (bez spacji): {create_b_contact.label_length}\n" )
+
+
+
 
